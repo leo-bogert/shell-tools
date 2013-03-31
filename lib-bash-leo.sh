@@ -34,6 +34,10 @@ enable_errexit_and_errtrace() {
 }
 
 remove_trailing_slash_on_path() {
+	if [ "$#" -ne 1 ] ; then
+		die "Invalid parameter count: $#"
+	fi
+	
 	if [[ "$1" != '/' ]] ; then
 		secho "${1%/}"
 	else
