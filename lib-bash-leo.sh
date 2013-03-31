@@ -6,6 +6,8 @@ set -o pipefail
 shopt -s nullglob
 shopt -s failglob
 
+readonly ORIGINAL_WORKING_DIR="$PWD"
+
 secho() {
 	printf '%s\n' "$*"
 }
@@ -40,6 +42,18 @@ remove_trailing_slash_on_path() {
 	
 	if [[ "$1" != '/' ]] ; then
 		secho "${1%/}"
+	else
+		secho "$1"
+	fi
+}
+
+make_path_absolute_to_original_working_dir() {
+	if [ "$#" -ne 1 ] ; then
+		die "Invalid parameter count: $#"
+	fi
+	
+	if [[ "$1" != /* ]] ; then
+		secho "$ORIGINAL_WORKING_DIR/$1"
 	else
 		secho "$1"
 	fi
