@@ -59,4 +59,15 @@ make_path_absolute_to_original_working_dir() {
 	fi
 }
 
+set_working_directory_or_die() {
+	if [ "$#" -ne 1 ] ; then
+		die 'Invalid parameter count'
+	fi
+	
+	if ! cd "$1" ; then
+		die 'Setting working directory failed!'
+	fi
+}
+
+
 enable_errexit_and_errtrace
