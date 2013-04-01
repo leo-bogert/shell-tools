@@ -21,7 +21,7 @@ stderr() {
 }
 
 die() {
-	stderr "$@"
+	stderr 'ERROR:' "$@"
 	exit 1
 }
 
