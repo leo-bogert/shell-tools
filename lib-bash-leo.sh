@@ -69,5 +69,20 @@ set_working_directory_or_die() {
 	fi
 }
 
+obtain_two_parameters_as_inputdir_output_dir() {
+	if [ "$#" -ne 2 ] ; then
+		die "Syntax: $0 INPUT_DIR OUTPUT_DIR"
+	fi
+
+	local input_dir="$(remove_trailing_slash_on_path "$1")"
+	local output_dir="$(remove_trailing_slash_on_path "$2")"
+	
+	INPUT_DIR_ABSOLUTE="$(make_path_absolute_to_original_working_dir "$input_dir")"
+	OUTPUT_DIR_ABSOLUTE="$(make_path_absolute_to_original_working_dir "$output_dir")"
+
+    stdout "Input directory: $INPUT_DIR_ABSOLUTE"
+    stdout "Output directory: $OUTPUT_DIR_ABSOLUTE"
+}
+
 
 enable_errexit_and_errtrace
