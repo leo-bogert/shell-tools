@@ -25,6 +25,13 @@ die() {
 	exit 1
 }
 
+show_parameters() {
+	for parameter; do
+		printf '%s' "\"$parameter\" "
+	done
+	secho ''
+}
+
 err_handler() {
 	die "error at line $1, last exit code is $2"
 }
