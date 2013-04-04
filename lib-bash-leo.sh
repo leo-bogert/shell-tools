@@ -84,5 +84,15 @@ obtain_two_parameters_as_inputdir_output_dir() {
     stdout "Output directory: $OUTPUT_DIR_ABSOLUTE"
 }
 
+ask_to_continue_or_die() {
+	local confirmed=n
+	read -p 'Continue? (y/n)' confirmed
+	
+	if [ "$confirmed" != 'y' ] ; then
+		stderr 'Aborting because you said so.'
+		exit 1
+	fi
+}
+
 
 enable_errexit_and_errtrace
