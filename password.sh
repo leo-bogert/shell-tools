@@ -1,10 +1,11 @@
 #!/bin/bash
-set -o nounset
-#set -o pipefail	# The "head" in the pipe would make the script fail
-set -o errexit
-set -o errtrace
-shopt -s nullglob
-shopt -s failglob
+if ! source "lib-bash-leo.sh" ; then
+	echo 'lib-bash-leo.sh is missing in PATH!'
+	exit 1
+fi
+
+
+set +o pipefail # Disable pipefail because the "head" in the pipe would make the script fail
 
 tr -cd '[:alnum:]' < /dev/urandom | head -c"$1"
 echo
