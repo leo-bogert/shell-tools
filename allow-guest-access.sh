@@ -1,12 +1,12 @@
 #!/bin/bash
-set -o nounset
-set -o pipefail
-set -o errexit
-set -o errtrace
-shopt -s nullglob
-shopt -s failglob
+if ! source "lib-bash-leo.sh" ; then
+	echo 'lib-bash-leo.sh is missing in PATH!'
+	exit 1
+fi
 
 SELF="$(readlink -f "$0")"
+
+die "review before using!"
 
 for_directories() {
 	chmod 'u=rwx' "$1"
