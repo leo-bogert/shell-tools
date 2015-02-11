@@ -40,4 +40,9 @@ done
 adb kill-server
 
 stdout "Success!"
-
+stdout ""
+stdout "To restore a backup, do:"
+stdout "    On computer: \$ adb forward tcp:RANDOM_PORT tcp:RANDOM_PORT"
+stdout "    Then once for each of partitions {boot, cache, metadata, system, userdata}, do:"
+stdout "        On android:  \$ nc -lp RANDOM_PORT > $partition_dir/PARTITION_NAME"
+stdout "        On computer: \$ busybox nc localhost RANDOM_PORT < PARTITION_NAME.img"
