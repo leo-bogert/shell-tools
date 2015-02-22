@@ -9,7 +9,7 @@ stderr 'Please only use this if you have reviewed the source code to suit for yo
 stderr ''
 
 partition_dir='/dev/block/platform/omap/omap_hsmmc.0/by-name'
-partitions=( boot cache system userdata )
+partitions=( boot cache dgs efs metadata misc param radio recovery sbl system userdata xloader )
 
 stderr 'WARNING: Only run this when cellphone is in recovery mode - it will unmount all critical system partitions!'
 ask_to_continue_or_die
