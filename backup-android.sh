@@ -31,10 +31,12 @@ set_working_directory_or_die "$directory"
 
 for partition in "${partitions[@]}" ; do
 	stdout "Pulling disk image of $partition ..."
-	adb pull "$partition_dir/$partition" "$partition.img"
-
-	stdout "Generating checksum of $partition.img..."
-	cksum "$partition.img" > "$partition.cksum"
+	if adb pull "$partition_dir/$partition" "$partition.img" ; then
+		stdout "Generating checksum of $partition.img..."
+		cksum "$partition.img" > "$partition.cksum"
+	else
+		stderr "ERROR: Pull failed for $partition!"
+	fi
 done
 
 adb kill-server
