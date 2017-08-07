@@ -6,6 +6,7 @@ fi
 
 stderr 'This is a script for pulling a full-disk-image backup off an Android device.'
 stderr 'Please only use this if you have reviewed the source code to suit for your needs, it is not very generic!'
+stderr 'WARNING: Do NOT use this with encrypted devices, they might store the key in the hardware!'
 stderr ''
 
 partition_dir='/dev/block/platform/omap/omap_hsmmc.0/by-name'
