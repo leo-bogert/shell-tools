@@ -11,7 +11,8 @@ shopt -s failglob
 if [ $# -ne 2 ] ; then
 	echo "This is a wrapper around kdesu to fix its lack of properly setting all environment variables and initializing all of KDE." >&2
 	echo "" >&2
-	echo "Syntax: $0 USER PROGRAM" >&2
+	echo "Syntax: $0 USER COMMAND" >&2
+	echo "Passing arguments to the COMMAND is NOT supported!" >&2
 	exit 1
 fi
 
