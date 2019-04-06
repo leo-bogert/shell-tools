@@ -19,16 +19,32 @@ fi
 user="$1"
 program="$2"
 
-# See $ man kdesu
-kdesu="$(kde4-config --path libexec)"kdesu
+if [ "$(whoami)" != "$user" ] ; then
+	# See $ man kdesu
+	kdesu="$(kde4-config --path libexec)"kdesu
+	
+	# -n not only to avoid saving passwords but also to ensure the kdesu daemon isn't started:
+	# This script intends to ensure that no processes spawned by it keep running once the launched program has exited.
+	#
+	# Reason for the user check in the passed bash script even though we already checked here:
+	# If the user presses the "ignore" button when being asked for a password kdesu will run the program as the current user.
+	# Thus we must check if we are the target user before running ourselves to avoid a fork bomb.
+	"$kdesu" -n -u "$user" -t -c "bash -xc 'realuser=\$(whoami) && [ \"\$realuser\" = \"$user\" ] && \"$0\" \"$user\" \"$program\"'"
+else
+	export GS_LIB="/home/$user/.fonts"
+	# See $ man pam_systemd
+	export XDG_RUNTIME_DIR="$(mktemp --directory)"
+	export KDE_SESSION_UID="$UID"
+	export GPG_AGENT_INFO=
+	export PAM_KWALLET_LOGIN=
+	export PAM_KWALLET5_LOGIN=
+	
+	"$program"
 
-# -n not only to avoid saving passwords but also to ensure the kdesu daemon isn't started:
-# This script intends to ensure that no processes spawned by it keep running once the launched program has exited.
-#
-# For XDG_RUNTIME_DIR see $ man pam_systemd
-"$kdesu" -n -u "$user" -t -c "bash -xc 'realuser=\$(whoami) && [ \"\$realuser\" = \"$user\" ] && GS_LIB=\"/home/$user/.fonts\" XDG_RUNTIME_DIR=\"\$(mktemp --directory)\" KDE_SESSION_UID=\"\$UID\" GPG_AGENT_INFO= PAM_KWALLET_LOGIN= PAM_KWALLET5_LOGIN= "$program"'"
-
-# FIXME: kontact will crash on new user acccounts due to lack of initializing the system configuration cache
-# Run the following as the target user before launching the program:
-#	kbuildsyscoca4 # Use --incremental ?
-#	kbuildsyscoca5 # Use --incremental ?
+	# FIXME: kontact will crash on new user acccounts due to lack of initializing the system configuration cache
+	# Run the following as the target user before launching the program:
+	#	kbuildsyscoca4 # Use --incremental ?
+	#	kbuildsyscoca5 # Use --incremental ?
+	
+	# FIXME: Is $PATH valid or is the one of the calling user inherited?
+fi
