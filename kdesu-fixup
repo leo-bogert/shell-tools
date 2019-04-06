@@ -1,0 +1,33 @@
+#!/bin/bash
+# Generic bash options which I always use for safety. Not all may be needed for this particular script.
+set -o nounset
+set -o pipefail
+set -o errexit
+set -o errtrace
+trap 'echo "Error at line $LINENO, exit code is $?" >&2' ERR
+shopt -s nullglob
+shopt -s failglob
+
+if [ $# -ne 2 ] ; then
+	echo "This is a wrapper around kdesu to fix its lack of properly setting all environment variables and initializing all of KDE." >&2
+	echo "" >&2
+	echo "Syntax: $0 USER PROGRAM" >&2
+	exit 1
+fi
+
+user="$1"
+program="$2"
+
+# See $ man kdesu
+kdesu="$(kde4-config --path libexec)"kdesu
+
+# -n not only to avoid saving passwords but also to ensure the kdesu daemon isn't started:
+# This script intends to ensure that no processes spawned by it keep running once the launched program has exited.
+#
+# For XDG_RUNTIME_DIR see $ man pam_systemd
+"$kdesu" -n -u "$user" -t -c "bash -xc 'realuser=\$(whoami) && [ \"\$realuser\" = \"$user\" ] && GS_LIB=\"/home/$user/.fonts\" XDG_RUNTIME_DIR=\"\$(mktemp --directory)\" KDE_SESSION_UID=\"\$UID\" GPG_AGENT_INFO= PAM_KWALLET_LOGIN= PAM_KWALLET5_LOGIN= "$program"'"
+
+# FIXME: kontact will crash on new user acccounts due to lack of initializing the system configuration cache
+# Run the following as the target user before launching the program:
+#	kbuildsyscoca4 # Use --incremental ?
+#	kbuildsyscoca5 # Use --incremental ?
