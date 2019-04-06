@@ -33,6 +33,7 @@ if [ "$(whoami)" != "$user" ] ; then
 else
 	export GS_LIB="/home/$user/.fonts"
 	# See $ man pam_systemd
+	# FIXME: Ensure the directory is the same as in the previous call to fully adhere to the specification
 	export XDG_RUNTIME_DIR="$(mktemp --directory)"
 	export KDE_SESSION_UID="$UID"
 	export GPG_AGENT_INFO=
