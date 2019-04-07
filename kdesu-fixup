@@ -51,5 +51,16 @@ else
 	# Run the following as the target user before launching the program:
 	#	kbuildsyscoca4 # Use --incremental ?
 	#	kbuildsyscoca5 # Use --incremental ?
-	"$program"
+	
+	# E.g. chromium-browser will fail to launch dbus on its own and print
+	# errors so we start it manually.
+	# Fortunately dbus offers a tool "dbus-launch" whose manpage sounds
+	# like it is intended to start dbus for the sole purpose of using
+	# a program with it, just what we want to do.
+	dbus-launch "$program"
+	# FIXME: $ man dbus-launch says:
+	# "If you run dbus-launch myapp (with any other options), dbus-daemon
+	# will not exit when myapp terminates: this is because myapp is assumed
+	# to be part of a larger session, rather than a session in its own right."
+	# -> How to tell dbus to shutdown when no more programs are using it?
 fi
