@@ -31,6 +31,12 @@ if [ "$(whoami)" != "$user" ] ; then
 	# Thus we must check if we are the target user before running ourselves to avoid a fork bomb.
 	"$kdesu" -n -u "$user" -t -c "bash -xc 'realuser=\$(whoami) && [ \"\$realuser\" = \"$user\" ] && \"$0\" \"$user\" \"$program\"'"
 else
+	# The following environment variables which kdesu doesn't deal with were obtained by:
+	# 	set | fgrep UID_OF_CALLING_USER
+	# 	set | fgrep NAME_OF_CALLING_USER
+	# where the "calling user" is the user which called kdesu. So these variables should be adjusted to refer to $user's stuff instead.
+	# Some were also determined by watching output of kontact for errors.
+	
 	export GS_LIB="/home/$user/.fonts"
 	# See $ man pam_systemd
 	# FIXME: Ensure the directory is the same as in the previous call to fully adhere to the specification
