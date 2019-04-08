@@ -130,5 +130,19 @@ else
 	kbuildsycoca4
 	kbuildsycoca5
 	
+	# FIXME: Tray icons of the new KStatusNotifierItem class, which e.g. kontact
+	# uses, won't work, likely because it uses dbus, and our target user has its
+	# own empty dbus.
+	# Debugging works with:
+	# 	QT_LOGGING_RULES='org.kde.knotifications.debug=true' kdesu-fixup ...
+	# Possible locations for the source code yielded by that follow - notice
+	# that they contain email addresses of their authors.
+	# New API - don't know which of the first two is actually in use:
+	#  https://cgit.kde.org/knotifications.git/tree/src/kstatusnotifieritem.cpp
+	#  https://cgit.kde.org/kdelibs.git/tree/kdeui/notifications/kstatusnotifieritem.cpp
+	#  https://cgit.kde.org/kde-workspace.git/tree/plasma-workspace/statusnotifierwatcher/statusnotifierwatcher.cpp
+	# Old API:
+	#  https://cgit.kde.org/kdelibs.git/tree/kdeui/notifications/ksystemtrayicon.cpp
+	
 	"$program"
 fi
