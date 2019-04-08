@@ -21,6 +21,7 @@ program="$2"
 
 dbus_running() {
 	local dbus_env="$1"
+	[ -z "$dbus_env" ] && exit 1
 	
 	[ -f "$dbus_env" ] &&
 	source "$dbus_env" &&
