@@ -20,7 +20,9 @@ user="$1"
 program="$2"
 
 dbus_running() {
-	 pgrep --euid "$user" --exact dbus-daemon >/dev/null
+	[ -f "$dbus_env" ] &&
+	source "$dbus_env" &&
+	ps --pid "$DBUS_SESSION_BUS_PID" > /dev/null
 }
 
 if [ "$(whoami)" != "$user" ] ; then
