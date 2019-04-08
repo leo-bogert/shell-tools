@@ -16,6 +16,9 @@ if [ $# -ne 2 ] ; then
 	exit 1
 fi
 
+# TODO: Read the whole of /usr/bin/startkde to get more inspiration of what else
+# needs fixing.
+
 user="$1"
 program="$2"
 
