@@ -31,6 +31,9 @@ if [ "$(whoami)" != "$user" ] ; then
 	# Thus we must check if we are the target user before running ourselves to avoid a fork bomb.
 	"$kdesu" -n -u "$user" -t -c "bash -xc 'realuser=\$(whoami) && [ \"\$realuser\" = \"$user\" ] && \"$0\" \"$user\" \"$program\"'"
 else
+	# For easy debugging
+	set -x
+	
 	# Prevent e.g. save dialogs in the GUI from starting at the inaccessible
 	# homedir of the calling user.
 	cd "$HOME"
