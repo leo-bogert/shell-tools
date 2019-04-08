@@ -46,7 +46,7 @@ else
 	export PAM_KWALLET_LOGIN=
 	export PAM_KWALLET5_LOGIN=
 	# FIXME: Is $PATH valid or is the one of the calling user inherited?
-		
+	
 	# FIXME: kontact will crash on new user acccounts due to lack of initializing the system configuration cache
 	# Run the following as the target user before launching the program:
 	#	kbuildsyscoca4 # Use --incremental ?
