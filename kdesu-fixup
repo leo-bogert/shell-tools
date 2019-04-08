@@ -19,6 +19,10 @@ fi
 user="$1"
 program="$2"
 
+dbus_running() {
+	 pgrep --euid "$user" --exact dbus-daemon >/dev/null
+}
+
 if [ "$(whoami)" != "$user" ] ; then
 	# See $ man kdesu
 	kdesu="$(kde4-config --path libexec)"kdesu
@@ -37,6 +41,12 @@ else
 	# Prevent e.g. save dialogs in the GUI from starting at the inaccessible
 	# homedir of the calling user.
 	cd "$HOME"
+	
+	# We need a directory which persists across multiple executions to
+	# ensure we can re-use existing dbus-daemon instances.
+	my_dir="$HOME/.cache/kdesu-fixup"
+	mkdir --parents "$my_dir"
+	chmod 0700 "$my_dir"
 	
 	# The following environment variables which kdesu doesn't deal with were obtained by:
 	# 	set | fgrep UID_OF_CALLING_USER
@@ -69,12 +79,19 @@ else
 	# Fortunately dbus offers a tool "dbus-launch" whose manpage sounds
 	# like it is intended to start dbus for the sole purpose of using
 	# a program with it, just what we want to do.
-	dbus-launch --exit-with-x11 "$program"
+	dbus_env="$my_dir/dbus-environment"
+	if ! dbus_running ; then
+		dbus-launch --exit-with-x11 --sh-syntax > "$dbus_env"
+	fi
+	source "$dbus_env"
+	
 	# FIXME: $ man dbus-launch says:
 	# "If you run dbus-launch myapp (with any other options), dbus-daemon
 	# will not exit when myapp terminates: this is because myapp is assumed
 	# to be part of a larger session, rather than a session in its own right."
 	# -> How to tell dbus to shutdown when no more programs are using it?
+	# EDIT: The $dbus_env file contains DBUS_SESSION_BUS_PID, we might be
+	# able to kill it by killing that process.
 	
 	# FIXME: chromium-browser startup is slow due to a timeout:
 	# 	Failed to call method: org.freedesktop.Notifications.GetCapabilities:
@@ -82,4 +99,6 @@ else
 	# 	org.freedesktop.DBus.Error.NoReply: Did not receive a reply.[...]
 	# This possibly is because there is no notification widget running in the
 	# target user: https://bbs.archlinux.org/viewtopic.php?id=236020
+	
+	"$program"
 fi
