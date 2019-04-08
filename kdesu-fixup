@@ -46,7 +46,6 @@ set_xdg_runtime_dir_from_file() {
 		cat <<< "$dir" > "$file" # echo isn't safe with arbitrary strings
 	fi
 	
-	# See $ man pam_systemd for the semantics of this
 	XDG_RUNTIME_DIR="$dir"
 }
 
