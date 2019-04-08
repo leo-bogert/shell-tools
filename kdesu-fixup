@@ -27,6 +27,26 @@ dbus_running() {
 	ps --pid "$DBUS_SESSION_BUS_PID" > /dev/null
 }
 
+set_xdg_runtime_dir_from_file() {
+	local file="$1"
+	[ -z "$file" ] && exit 1
+	
+	local dir
+	if [ -f "$file" ] ; then
+		dir=$(<"$file")
+	fi
+	
+	if [ -z "$dir" ] || ! [ -d "$dir" ] ; then
+		if ! dir="$(mktemp --directory)" ; then
+			return 1
+		fi
+		cat <<< "$dir" > "$file" # echo isn't safe with arbitrary strings
+	fi
+	
+	# See $ man pam_systemd for the semantics of this
+	XDG_RUNTIME_DIR="$dir"
+}
+
 if [ "$(whoami)" != "$user" ] ; then
 	# See $ man kdesu
 	kdesu="$(kde4-config --path libexec)"kdesu
@@ -58,10 +78,9 @@ else
 	# where the "calling user" is the user which called kdesu. So these variables should be adjusted to refer to $user's stuff instead.
 	# Some were also determined by watching output of kontact for errors.
 	
+	set_xdg_runtime_dir_from_file "$my_dir/xdg_runtime_dir"
+	export XDG_RUNTIME_DIR
 	export GS_LIB="$HOME/.fonts"
-	# See $ man pam_systemd
-	# FIXME: Ensure the directory is the same as in the previous call to fully adhere to the specification
-	export XDG_RUNTIME_DIR="$(mktemp --directory)"
 	export KDE_SESSION_UID="$UID"
 	export GPG_AGENT_INFO=
 	export PAM_KWALLET_LOGIN=
