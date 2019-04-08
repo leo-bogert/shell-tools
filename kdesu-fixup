@@ -87,7 +87,15 @@ else
 	set_xdg_runtime_dir_from_file "$my_dir/xdg_runtime_dir"
 	export XDG_RUNTIME_DIR
 	export GS_LIB="$HOME/.fonts"
-	export KDE_SESSION_UID="$UID"
+	# Do not set KDE_SESSION_UID to the $UID of the new user:
+	# /usr/bin/startkde contains the following comment:
+	# 	Additionally there is (since KDE 3.5.7) $KDE_SESSION_UID with the uid
+	# 	of the user running the KDE session. It should be rarely needed (e.g.
+	# 	after sudo to prevent desktop-wide functionality in the new user's
+	# 	kded).
+	# TODO: I'm not really sure if this is correct.
+	#
+	# export KDE_SESSION_UID="$UID"
 	export GPG_AGENT_INFO=
 	export PAM_KWALLET_LOGIN=
 	export PAM_KWALLET5_LOGIN=
