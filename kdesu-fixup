@@ -52,6 +52,11 @@ else
 	#	kbuildsyscoca4 # Use --incremental ?
 	#	kbuildsyscoca5 # Use --incremental ?
 	
+	# TODO: Firefox once complained about not being able to create a dconf
+	# dir in some /tmp dir. Unable to reproduce it unfortunately.
+	# Is it necessary to create it? And is it really in the XDG_RUNTIME_DIR?
+	#	mkdir "$(XDG_RUNTIME_DIR)/dconf"
+	
 	# E.g. chromium-browser will fail to launch dbus on its own and print
 	# errors so we start it manually.
 	# Fortunately dbus offers a tool "dbus-launch" whose manpage sounds
