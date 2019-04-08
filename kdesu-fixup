@@ -27,6 +27,9 @@ dbus_running() {
 	ps --pid "$DBUS_SESSION_BUS_PID" > /dev/null
 }
 
+# XDG_RUNTIME_DIR is supposed to persist while the user stays logged in,
+# but needs not persist across machine restarts. See $ man pam_systemd.
+# Thus a bare mktemp will not be sufficient, we must store the dir.
 set_xdg_runtime_dir_from_file() {
 	local file="$1"
 	[ -z "$file" ] && exit 1
