@@ -20,6 +20,8 @@ user="$1"
 program="$2"
 
 dbus_running() {
+	local dbus_env="$1"
+	
 	[ -f "$dbus_env" ] &&
 	source "$dbus_env" &&
 	ps --pid "$DBUS_SESSION_BUS_PID" > /dev/null
@@ -82,7 +84,7 @@ else
 	# like it is intended to start dbus for the sole purpose of using
 	# a program with it, just what we want to do.
 	dbus_env="$my_dir/dbus-environment"
-	if ! dbus_running ; then
+	if ! dbus_running "$dbus_env" ; then
 		dbus-launch --exit-with-x11 --sh-syntax > "$dbus_env"
 	fi
 	source "$dbus_env"
