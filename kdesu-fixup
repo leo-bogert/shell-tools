@@ -35,7 +35,7 @@ set_xdg_runtime_dir_from_file() {
 	local file="$1"
 	[ -z "$file" ] && exit 1
 	
-	local dir
+	local dir=""
 	if [ -f "$file" ] ; then
 		dir=$(<"$file")
 	fi
