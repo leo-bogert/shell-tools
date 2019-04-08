@@ -63,4 +63,11 @@ else
 	# will not exit when myapp terminates: this is because myapp is assumed
 	# to be part of a larger session, rather than a session in its own right."
 	# -> How to tell dbus to shutdown when no more programs are using it?
+	
+	# FIXME: chromium-browser startup is slow due to a timeout:
+	# 	Failed to call method: org.freedesktop.Notifications.GetCapabilities:
+	# 	object_path= /org/freedesktop/Notifications:
+	# 	org.freedesktop.DBus.Error.NoReply: Did not receive a reply.[...]
+	# This possibly is because there is no notification widget running in the
+	# target user: https://bbs.archlinux.org/viewtopic.php?id=236020
 fi
