@@ -26,8 +26,12 @@ dbus_running() {
 	local dbus_env="$1"
 	[ -z "$dbus_env" ] && exit 1
 	
+	# Prevent unbound variable access if the file we load it from is corrupted
+	DBUS_SESSION_BUS_PID=''
+	
 	[ -f "$dbus_env" ] &&
 	source "$dbus_env" &&
+	[ -n "$DBUS_SESSION_BUS_PID" ] &&
 	ps --pid "$DBUS_SESSION_BUS_PID" > /dev/null
 }
 
