@@ -57,7 +57,7 @@ else
 	# Fortunately dbus offers a tool "dbus-launch" whose manpage sounds
 	# like it is intended to start dbus for the sole purpose of using
 	# a program with it, just what we want to do.
-	dbus-launch "$program"
+	dbus-launch --exit-with-x11 "$program"
 	# FIXME: $ man dbus-launch says:
 	# "If you run dbus-launch myapp (with any other options), dbus-daemon
 	# will not exit when myapp terminates: this is because myapp is assumed
