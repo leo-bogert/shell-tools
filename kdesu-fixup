@@ -93,11 +93,6 @@ else
 	export PAM_KWALLET5_LOGIN=
 	# FIXME: Is $PATH valid or is the one of the calling user inherited?
 	
-	# FIXME: kontact will crash on new user acccounts due to lack of initializing the system configuration cache
-	# Run the following as the target user before launching the program:
-	#	kbuildsyscoca4 # Use --incremental ?
-	#	kbuildsyscoca5 # Use --incremental ?
-	
 	# TODO: Firefox once complained about not being able to create a dconf
 	# dir in some /tmp dir. Unable to reproduce it unfortunately.
 	# Is it necessary to create it? And is it really in the XDG_RUNTIME_DIR?
@@ -128,6 +123,12 @@ else
 	# 	org.freedesktop.DBus.Error.NoReply: Did not receive a reply.[...]
 	# This possibly is because there is no notification widget running in the
 	# target user: https://bbs.archlinux.org/viewtopic.php?id=236020
+	
+	# kontact would crash on new user acccounts due to lack of initializing the
+	# KDE system configuration cache, so we hereby create it.
+	# The latter uses dbus according to man so we do this after dbus-launch.
+	kbuildsycoca4
+	kbuildsycoca5
 	
 	"$program"
 fi
