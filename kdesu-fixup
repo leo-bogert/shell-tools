@@ -32,7 +32,8 @@ dbus_running() {
 	[ -f "$dbus_env" ] &&
 	source "$dbus_env" &&
 	[ -n "$DBUS_SESSION_BUS_PID" ] &&
-	ps --pid "$DBUS_SESSION_BUS_PID" > /dev/null
+	# FIXME: This breaks if a random other process has the same PID
+	ps --user "$user" --pid "$DBUS_SESSION_BUS_PID" > /dev/null
 }
 
 # XDG_RUNTIME_DIR is supposed to persist while the user stays logged in,
